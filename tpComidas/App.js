@@ -3,11 +3,13 @@ import { StyleSheet, Text, View } from 'react-native';
 
 export default function App() {
   return (
+    <ContextProvider>
     <View style={styles.container}>
       <Text>Open app!</Text>
       
       <StatusBar style="auto" />
     </View>
+    </ContextProvider>
   );
 }
 
