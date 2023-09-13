@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { SafeAreaView, FlatList, ActivityIndicator, Text } from "react-native";
-import { getComidas } from "../services/apiComida";
+import { getComidas, getComidasBySearch } from "../services/apiComida";
 //import { ListComponentStyle } from "./styles";
-import ListChild from "./ListChild";
-//import { useContextState } from "../../../contextState";
+import ListChild from "./Listchild";
+import { useContextState } from "../../contextState";
 
 const ListComponent = ({ search }) => {
     const { contextState, setContextState } = useContextState();
@@ -19,10 +19,10 @@ const ListComponent = ({ search }) => {
   
     useEffect(() => {
       setContextState({ newValue: true, type: "SET_LOADING" });
-      getMoviesBySearchTitle(search)
+      getComidasBySearch(search)
         .then((response) => {
           setContextState({ newValue: false, type: "SET_LOADING" });
-          setContextState({ newValue: response, type: "SET_MOVIES" });
+          setContextState({ newValue: response, type: "SET_COMIDAS" });
         })
         .catch((error) => {
           console.log(error);
@@ -38,9 +38,9 @@ const ListComponent = ({ search }) => {
         )}
         <Text>{search}</Text>
         <FlatList
-        data={contextState?.allMovies ?? []}
+        data={contextState?.allComidas ?? []}
           renderItem={renderItem}
-          keyExtractor={(item) => item.Title}
+          keyExtractor={(item) => item.title}
         />
       </SafeAreaView>
     );
