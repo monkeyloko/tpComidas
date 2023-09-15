@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { SafeAreaView, FlatList, ActivityIndicator, Text } from "react-native";
 import { getComidas, getComidasBySearch } from "../services/apiComida";
-//import { ListComponentStyle } from "./styles";
+import { ListComponentStyle } from "./styles";
 import ListChild from "./Listchild";
-import { useContextState } from "../../contextState";
+import { ActionTypes, useContextState } from "../../contextState";
 
 const ListComponent = ({ search }) => {
     const { contextState, setContextState } = useContextState();
@@ -18,15 +18,16 @@ const ListComponent = ({ search }) => {
     );
   
     useEffect(() => {
-      setContextState({ newValue: true, type: "SET_LOADING" });
+      setContextState({ newValue: true, type: ActionTypes.setLoading });
       getComidasBySearch(search)
         .then((response) => {
-          setContextState({ newValue: false, type: "SET_LOADING" });
-          setContextState({ newValue: response, type: "SET_COMIDAS" });
+          setContextState({ newValue: false, type: ActionTypes.setLoading });
+          setContextState({ newValue: response, type: ActionTypes.setComidas });
+          console.log()
         })
         .catch((error) => {
           console.log(error);
-          setContextState({ newValue: false, type: "SET_LOADING" });
+          setContextState({ newValue: false, type: ActionTypes.setLoading });
         });
       return;
     }, []);

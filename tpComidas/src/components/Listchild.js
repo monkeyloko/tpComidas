@@ -7,7 +7,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { getComidasById } from "../services/apiComida";
-//import { ListChildStyle } from "./styles";
+import { ListChildStyle } from "./styles";
 
 const ListChild = ({ item, pressed, setPressed, index }) => {
   const [comida, setComida] = useState(null);
@@ -15,6 +15,7 @@ const ListChild = ({ item, pressed, setPressed, index }) => {
 
   useEffect(() => {
     setComida(null);
+    console.log
   }, [pressed]);
 
   const onViewPressed = () => {
@@ -23,11 +24,11 @@ const ListChild = ({ item, pressed, setPressed, index }) => {
       .then((response) => {
         setLoading(false);
         setComida(response);
-        console.log(response);
+        console.log("sda", response);
       })
       .catch((error) => {
         setLoading(false);
-        console.log(error);
+        console.log("dsdsdsd",error);
       });
     setPressed(index === pressed ? null : index);
   };
@@ -54,7 +55,7 @@ const ListChild = ({ item, pressed, setPressed, index }) => {
               { backgroundColor: pressed === index ? "#00ffff" : "#ececec" },
             ]}
           >
-            <Text>{comida.spoonacularScore}</Text>
+            <Text>a</Text>
           </View>
         )}
       </View>
