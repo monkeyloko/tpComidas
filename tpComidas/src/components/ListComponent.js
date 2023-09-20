@@ -18,7 +18,8 @@ const ListComponent = ({ search }) => {
     );
   
     useEffect(() => {
-      setContextState({ newValue: true, type: ActionTypes.setLoading });
+      if(search.length >= 2){
+        setContextState({ newValue: true, type: ActionTypes.setLoading });
       getComidasBySearch(search)
         .then((response) => {
           setContextState({ newValue: false, type: ActionTypes.setLoading });
@@ -29,15 +30,17 @@ const ListComponent = ({ search }) => {
           console.log(error);
           setContextState({ newValue: false, type: ActionTypes.setLoading });
         });
+        console.log(search.length)
+      }
       return;
-    }, []);
+    }, [search]);
   
     return (
       <SafeAreaView style={ListComponentStyle.container}>
         {contextState?.loading && (
           <ActivityIndicator size="large" color="#00ff00" />
         )}
-        <Text>{search}</Text>
+        
         <FlatList
         data={contextState?.allComidas ?? []}
           renderItem={renderItem}

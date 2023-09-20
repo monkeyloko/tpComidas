@@ -7,13 +7,13 @@ export default function App() {
   const [search, setSearch] = useState("pizza");
   const onPress = () => {
     console.log("on press");
-    setSearch("pizza");
+
   };
+  
   return (
     <ContextProvider>
     <View style={styles.container}>
-     
-      <TouchableOpacity onPress={onPress}></TouchableOpacity>
+      <input value={search} onChange={(e) => setSearch(e.target.value)} />
       <ListComponent search={search}></ListComponent>
       <StatusBar style="auto"/>
     </View>

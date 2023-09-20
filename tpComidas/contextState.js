@@ -4,12 +4,14 @@ export const initialState = {
   loading: false,
   allComidas: [],
   userToken: "",
+  menu:[]
 };
 
 export const ActionTypes = {
   setLoading: "SET_LOADING",
   setComidas: "SET_COMIDAS",
   setUserToken: "Set_USER_TOKEN",
+  setMenu: "SET_MENU"
 };
 
 export const reducer = (state = {}, action) => {
@@ -22,6 +24,9 @@ export const reducer = (state = {}, action) => {
     }
     case ActionTypes.setUserToken: {
       return { ...state, userToken: action.newValue };
+    }
+    case ActionTypes.setMenu: {
+      return { ...state, menu: action.newValue };
     }
     default: {
       return state;
