@@ -8,9 +8,12 @@ import {
 } from "react-native";
 import { getComidasById } from "../services/apiComida";
 import { ListChildStyle } from "./styles";
+import * as React from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
-const ListChild = ({ item, pressed, setPressed, index }) => {
-  const [comida, setComida] = useState(null);
+const ListChild = ({ navigation, item, pressed, setPressed, index }) => {
+  const [comida, setComida] = useState({});
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -19,17 +22,16 @@ const ListChild = ({ item, pressed, setPressed, index }) => {
   }, [pressed]);
 
   const onViewPressed = () => {
-    setLoading(true);
-    getComidasById(item.id)
-      .then((response) => {
-        setLoading(false);
-        setComida(response);
-        console.log("sda", response);
-      })
-      .catch((error) => {
+    setLoading(true);try{
+      
+
+     console.log(item.id)
+    navigation.navigate('detalle', { itemId: item.id }) 
+    }
+      catch(error) {
         setLoading(false);
         console.log("dsdsdsd",error);
-      });
+      };
     setPressed(index === pressed ? null : index);
   };
   return ( 
@@ -55,9 +57,10 @@ const ListChild = ({ item, pressed, setPressed, index }) => {
               { backgroundColor: pressed === index ? "#00ffff" : "#ececec" },
             ]}
           >
-            <Text>a</Text>
+            <Text></Text>
           </View>
         )}
+      
       </View>
     </TouchableOpacity>
   );

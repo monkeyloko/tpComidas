@@ -2,9 +2,17 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { ContextProvider } from "./contextState";
 import ListComponent from "./src/components/ListComponent";
+import DetallePlato from './src/components/DetallePlato';
 import { useState } from "react";
+import * as React from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import ListChild from './src/components/Listchild';
+
+const Stack = createNativeStackNavigator();
+
 export default function App() {
-  const [search, setSearch] = useState("pizza");
+ 
   const onPress = () => {
     console.log("on press");
 
@@ -12,11 +20,29 @@ export default function App() {
   
   return (
     <ContextProvider>
-    <View style={styles.container}>
-      <input value={search} onChange={(e) => setSearch(e.target.value)} />
-      <ListComponent search={search}></ListComponent>
-      <StatusBar style="auto"/>
-    </View>
+      <NavigationContainer>
+      <Stack.Navigator>
+      <Stack.Screen
+          name="Home"
+          component={ListComponent}
+          
+        />
+
+        <Stack.Screen
+          name="list"
+          component={ListChild}
+          
+        /> 
+        
+        <Stack.Screen
+          name="detalle"
+          component={DetallePlato}
+          
+        /> 
+        
+   
+    </Stack.Navigator>
+    </NavigationContainer>
     </ContextProvider>
   );
 }

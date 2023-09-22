@@ -8,6 +8,7 @@ export const ListComponentStyle = StyleSheet.create({
 });
 
 
+
 export const ListChildStyle = StyleSheet.create({
     item: {
         padding: 20,
@@ -23,5 +24,9 @@ export const ListChildStyle = StyleSheet.create({
     tinyLogo: {
         width: 50,
         height: 50,
+    },
+    bigLogo: {
+        width: 200,
+        height: 200,
     },
 });

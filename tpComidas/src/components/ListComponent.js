@@ -5,15 +5,17 @@ import { ListComponentStyle } from "./styles";
 import ListChild from "./Listchild";
 import { ActionTypes, useContextState } from "../../contextState";
 
-const ListComponent = ({ search }) => {
+const ListComponent = ({ navigation }) => {
     const { contextState, setContextState } = useContextState();
     const [pressed, setPressed] = useState({});
+    const [search, setSearch] = useState("pizza");
     const renderItem = ({ item, index }) => (
       <ListChild
         item={item}
         index={index}
         pressed={pressed}
         setPressed={setPressed}
+        navigation={navigation} 
       />
     );
   
@@ -37,6 +39,7 @@ const ListComponent = ({ search }) => {
   
     return (
       <SafeAreaView style={ListComponentStyle.container}>
+        <input value={search} onChange={(e) => setSearch(e.target.value)} />
         {contextState?.loading && (
           <ActivityIndicator size="large" color="#00ff00" />
         )}
@@ -46,6 +49,7 @@ const ListComponent = ({ search }) => {
           renderItem={renderItem}
           keyExtractor={(item) => item.title}
         />
+         
       </SafeAreaView>
     );
   };
