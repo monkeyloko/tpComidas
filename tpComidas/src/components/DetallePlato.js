@@ -25,17 +25,13 @@ const DetallePlato = ({ navigation, route }) => {
   }, []);
 
   const onPressed = () => {
-    // Verifica si contextState?.menu existe y es un array antes de copiarlo
     const menuActual = Array.isArray(contextState?.menu) ? contextState.menu : [];
 
-    // Verifica si el plato ya existe en el menú
     const platoExistente = menuActual.find((item) => item.id === plato.id);
 
     if (platoExistente) {
-      // El plato ya existe en el menú, puedes mostrar un mensaje o realizar alguna acción
       console.log("El plato ya existe en el menú.");
     } else {
-      // El plato no existe en el menú, agrégalo
       const nuevoMenu = [...menuActual, plato];
       setContextState({ newValue: nuevoMenu, type: ActionTypes.setMenu });
       console.log("Plato agregado al menú");

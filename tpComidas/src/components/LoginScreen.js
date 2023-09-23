@@ -23,9 +23,7 @@ const LoginScreen = ({ navigation }) => {
 
         try {
             const response = await login(usuario);
-            setContextState({ newValue: true, type: ActionTypes.setUserToken }) // Utiliza tu función de inicio de sesión
-            // Almacena el token en el contexto aquí (setContextState)
-            // Redirige al usuario a la pantalla principal (Home)
+            setContextState({ newValue: true, type: ActionTypes.setUserToken })
             navigation.navigate('Home');
         } catch (error) {
             console.error('Error de inicio de sesión:', error);
