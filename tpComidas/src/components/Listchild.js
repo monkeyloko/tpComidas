@@ -6,11 +6,11 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from "react-native";
-import { getComidasById } from "../services/apiComida";
+import { getComidasById } from "../services/apiService";
 import { ListChildStyle } from "./styles";
 import * as React from 'react';
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 const ListChild = ({ navigation, item, pressed, setPressed, index }) => {
   const [comida, setComida] = useState({});
@@ -22,21 +22,21 @@ const ListChild = ({ navigation, item, pressed, setPressed, index }) => {
   }, [pressed]);
 
   const onViewPressed = () => {
-    setLoading(true);try{
-      
+    setLoading(true); try {
 
-     console.log(item.id)
-    navigation.navigate('detalle', { itemId: item.id }) 
+
+      console.log(item.id)
+      navigation.navigate('detalle', { itemId: item.id })
     }
-      catch(error) {
-        setLoading(false);
-        console.log("dsdsdsd",error);
-      };
+    catch (error) {
+      setLoading(false);
+      console.log("dsdsdsd", error);
+    };
     setPressed(index === pressed ? null : index);
   };
-  return ( 
+  return (
     <TouchableOpacity onPress={onViewPressed}>
-      {loading && <ActivityIndicator size="large" color="#00ff00" />}
+
       <View
         style={[
           ListChildStyle.item,
@@ -50,17 +50,8 @@ const ListChild = ({ navigation, item, pressed, setPressed, index }) => {
           }}
         />
         <Text style={ListChildStyle.title}>{item.title}</Text>
-        {comida && pressed === index && (
-          <View
-            style={[
-              ListChildStyle.item,
-              { backgroundColor: pressed === index ? "#00ffff" : "#ececec" },
-            ]}
-          >
-            <Text></Text>
-          </View>
-        )}
-      
+
+
       </View>
     </TouchableOpacity>
   );

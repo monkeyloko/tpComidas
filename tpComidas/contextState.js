@@ -4,13 +4,13 @@ export const initialState = {
   loading: false,
   allComidas: [],
   userToken: "",
-  menu:[]
+  menu: []
 };
 
 export const ActionTypes = {
   setLoading: "SET_LOADING",
   setComidas: "SET_COMIDAS",
-  setUserToken: "Set_USER_TOKEN",
+  setUserToken: "SET_USER_TOKEN",
   setMenu: "SET_MENU"
 };
 
@@ -36,7 +36,7 @@ export const reducer = (state = {}, action) => {
 
 export const initialContext = {
   contextState: initialState,
-  setContextState: () => {},
+  setContextState: () => { },
 };
 
 const Context = React.createContext(initialContext);
