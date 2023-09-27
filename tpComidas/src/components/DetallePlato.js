@@ -1,13 +1,39 @@
 import * as React from 'react';
-import { View, Text, Image, ActivityIndicator, StyleSheet, Button, TouchableOpacity } from 'react-native';
+import { View, Text, Image, ActivityIndicator, StyleSheet, Button, TouchableOpacity, Alert } from 'react-native';
 import { useEffect, useState } from "react";
 import { ActionTypes, useContextState } from "../../contextState";
 import { getComidasById } from '../services/apiService';
 import { ListChildStyle } from './styles';
 
 const DetallePlato = ({ navigation, route }) => {
-  const [plato, setPlato] = useState({})
+  const [plato, setPlato] = useState({});
+  const [platoExistente, setPlatoExistente] = useState(false);
   const { contextState, setContextState } = useContextState();
+
+  const showAlert = () =>
+    Alert.alert(
+      'Error',
+      'El plato ya se encuentra en el menú',
+      [
+        {
+          text: 'Cancelar',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        {
+          text: 'Eliminar',
+          onPress: () => Eliminar(),
+          style: 'destructive',
+        },
+      ],
+      {
+        cancelable: true,
+        onDismiss: () =>
+          Alert.alert(
+            'This alert was dismissed by tapping outside of the alert dialog.',
+          ),
+      },
+    );
 
   useEffect(() => {
     setContextState({ newValue: true, type: ActionTypes.setLoading });
@@ -17,6 +43,14 @@ const DetallePlato = ({ navigation, route }) => {
         setContextState({ newValue: false, type: ActionTypes.setLoading });
         setPlato(response);
         console.log(response);
+        
+        // Verifica si el plato está en el menú al cargar la pantalla
+        const menuActual = Array.isArray(contextState?.menu) ? contextState.menu : [];
+        const platoExistente = menuActual.find((item) => item.id === response.id);
+        
+        if (platoExistente) {
+          setPlatoExistente(true);
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -24,21 +58,30 @@ const DetallePlato = ({ navigation, route }) => {
       });
   }, []);
 
+  const Eliminar = () => {
+    const menuActual = Array.isArray(contextState?.menu) ? contextState.menu : [];
+
+    // Filtra el plato existente para eliminarlo del menú
+    const nuevoMenu = menuActual.filter((item) => item.id !== plato.id);
+    setContextState({ newValue: nuevoMenu, type: ActionTypes.setMenu });
+    console.log("Plato eliminado del menú");
+    navigation.navigate("Home");
+  };
+
   const onPressed = () => {
     const menuActual = Array.isArray(contextState?.menu) ? contextState.menu : [];
 
     const platoExistente = menuActual.find((item) => item.id === plato.id);
 
     if (platoExistente) {
-      console.log("El plato ya existe en el menú.");
+      setPlatoExistente(true);
+      showAlert();
     } else {
       const nuevoMenu = [...menuActual, plato];
       setContextState({ newValue: nuevoMenu, type: ActionTypes.setMenu });
       console.log("Plato agregado al menú");
       navigation.navigate("Home");
     }
-
-
   };
 
   return (
@@ -51,18 +94,20 @@ const DetallePlato = ({ navigation, route }) => {
         style={styles.image}
         source={{ uri: plato.image }}
       />
-      <Text style={ListChildStyle.title}>Precio de la porcion: {plato.pricePerServing}</Text>
+      <Text style={ListChildStyle.title}>Precio de la porción: {plato.pricePerServing}</Text>
       <Text style={ListChildStyle.title}>{plato.vegan ? "Si" : "No"} es vegano</Text>
 
-      <TouchableOpacity style={styles.Button} onPress={() => onPressed()}>
-        <Text style={styles.ButtonText}>Agregar</Text>
-
-      </TouchableOpacity>
-
+      {platoExistente ? (
+        <TouchableOpacity style={styles.ButtonEliminar} onPress={() => Eliminar()}>
+          <Text style={styles.ButtonTextEliminar}>Eliminar del menú</Text>
+        </TouchableOpacity>
+      ) : (
+        <TouchableOpacity style={styles.Button} onPress={() => onPressed()}>
+          <Text style={styles.ButtonText}>Agregar</Text>
+        </TouchableOpacity>
+      )}
 
     </View>
-
-
   );
 };
 
@@ -90,8 +135,22 @@ const styles = StyleSheet.create({
     height: 40,
     alignItems: 'center',
     justifyContent: 'center',
+    marginTop: 10,
   },
   ButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
+  ButtonEliminar: {
+    backgroundColor: 'red',
+    borderRadius: 5,
+    width: '80%',
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 10,
+  },
+  ButtonTextEliminar: {
     color: 'white',
     fontWeight: 'bold',
   },
