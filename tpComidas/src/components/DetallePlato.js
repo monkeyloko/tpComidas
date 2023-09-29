@@ -123,7 +123,7 @@ const DetallePlato = ({ navigation, route }) => {
       {platoExistente ? (
         <TouchableOpacity style={styles.ButtonEliminar} onPress={() => Eliminar()}>
           <Text style={styles.ButtonTextEliminar}>Eliminar del menú</Text>
-        </TouchableOpacity>
+        </TouchableOpacity>        
       ) : (
         // Deshabilitar el botón "Agregar" si el plato no se ha cargado correctamente
         !contextState.loading ? (
