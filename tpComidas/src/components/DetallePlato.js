@@ -44,8 +44,9 @@ const DetallePlato = ({ navigation, route }) => {
         setContextState({ newValue: false, type: ActionTypes.setLoading });
         setPlato(response);
         console.log(response);
-
+        setContextState({ newValue: true, type: ActionTypes.setLoading });
         // Verifica si el plato está en el menú al cargar la pantalla
+        setContextState({})
         const menuActual = Array.isArray(contextState?.menu) ? contextState.menu : [];
         const platoExistente = menuActual.find((item) => item.id === response.id);
 
@@ -56,6 +57,9 @@ const DetallePlato = ({ navigation, route }) => {
       .catch((error) => {
         console.log(error);
         setContextState({ newValue: false, type: ActionTypes.setLoading });
+      })
+      .finally(() => {
+        setContextState({ newValue: false, type: ActionTypes.setLoading }); // Aquí detenemos la carga
       });
   }, []);
 
@@ -96,6 +100,7 @@ const DetallePlato = ({ navigation, route }) => {
 
   const agregarPlato = (menuActual) => {
     const nuevoMenu = [...menuActual, plato];
+    setContextState({ newValue: true, type: ActionTypes.setLoading })
     setContextState({ newValue: nuevoMenu, type: ActionTypes.setMenu });
     console.log("Plato agregado al menú");
     setCantidadPlatos(cantidadPlatos + 1);
@@ -120,9 +125,12 @@ const DetallePlato = ({ navigation, route }) => {
           <Text style={styles.ButtonTextEliminar}>Eliminar del menú</Text>
         </TouchableOpacity>
       ) : (
-        <TouchableOpacity style={styles.Button} onPress={() => onPressed()}>
-          <Text style={styles.ButtonText}>Agregar</Text>
-        </TouchableOpacity>
+        // Deshabilitar el botón "Agregar" si el plato no se ha cargado correctamente
+        !contextState.loading ? (
+          <TouchableOpacity style={styles.Button} onPress={() => onPressed()}>
+            <Text style={styles.ButtonText}>Agregar</Text>
+          </TouchableOpacity>
+        ) : null
       )}
 
     </View>
