@@ -7,6 +7,37 @@ import ListChild from "./Listchild";
 const Menu = ({ navigation }) => {
     const { contextState, setContextState } = useContextState();
     const [pressed, setPressed] = useState({});
+    const [precioTotal, setPrecioTotal] = useState(0);
+    const [promedioHS, setPromedioHS] = useState(0);
+
+    const calcularPrecioTotal = () => {
+        const menu = contextState?.menu ?? [];
+        const total = menu.reduce((acc, plato) => acc + plato.pricePerServing, 0);
+        return total;
+    };
+
+    const calcularPromedioHS = () => {
+        const menu = contextState?.menu ?? [];
+
+        if (menu.length === 0) {
+            return 0; // Devuelve 0 si el menú está vacío para evitar divisiones por cero.
+        }
+
+        const totalHealthScore = menu.reduce((acumulador, plato) => {
+            return acumulador + plato.healthScore;
+        }, 0);
+
+        return totalHealthScore / menu.length;
+    }
+
+
+    useEffect(() => {
+        // Calcula el precio total cuando cambia el menú
+        const total = calcularPrecioTotal();
+        const promedioHS = calcularPromedioHS()
+        setPromedioHS(promedioHS)
+        setPrecioTotal(total);
+    }, [contextState.menu]);
 
 
     const renderItem = ({ item, index }) => (
@@ -35,6 +66,11 @@ const Menu = ({ navigation }) => {
                 renderItem={renderItem}
                 keyExtractor={(item) => item.title}
             />
+            <Text>
+                Precio Total: {precioTotal}
+            </Text>
+            <Text>Promedio de HealthScore en el menú: {promedioHS}</Text>
+
             <TouchableOpacity style={styles.Button} onPress={() => onPressed()}>
                 <Text style={styles.ButtonText}>Buscador</Text>
 

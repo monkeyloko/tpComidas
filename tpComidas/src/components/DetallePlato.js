@@ -8,6 +8,7 @@ import { ListChildStyle } from './styles';
 const DetallePlato = ({ navigation, route }) => {
   const [plato, setPlato] = useState({});
   const [platoExistente, setPlatoExistente] = useState(false);
+  const [cantidadPlatos, setCantidadPlatos] = useState(0);
   const { contextState, setContextState } = useContextState();
 
   const showAlert = () =>
@@ -43,11 +44,11 @@ const DetallePlato = ({ navigation, route }) => {
         setContextState({ newValue: false, type: ActionTypes.setLoading });
         setPlato(response);
         console.log(response);
-        
+
         // Verifica si el plato está en el menú al cargar la pantalla
         const menuActual = Array.isArray(contextState?.menu) ? contextState.menu : [];
         const platoExistente = menuActual.find((item) => item.id === response.id);
-        
+
         if (platoExistente) {
           setPlatoExistente(true);
         }
@@ -65,6 +66,7 @@ const DetallePlato = ({ navigation, route }) => {
     const nuevoMenu = menuActual.filter((item) => item.id !== plato.id);
     setContextState({ newValue: nuevoMenu, type: ActionTypes.setMenu });
     console.log("Plato eliminado del menú");
+    setCantidadPlatos(cantidadPlatos - 1);
     navigation.navigate("Home");
   };
 
@@ -73,15 +75,31 @@ const DetallePlato = ({ navigation, route }) => {
 
     const platoExistente = menuActual.find((item) => item.id === plato.id);
 
-    if (platoExistente) {
-      setPlatoExistente(true);
-      showAlert();
+    if (menuActual.length >= 4) {
+      Alert.alert('Error', 'El menú ya tiene 4 platos. No se puede agregar más.');
+    } else if (plato.vegan) {
+      const veganos = menuActual.filter((item) => item.vegan);
+      if (veganos.length >= 2) {
+        Alert.alert('Error', 'Ya hay 2 platos veganos en el menú. No se puede agregar más.');
+      } else {
+        agregarPlato(menuActual);
+      }
     } else {
-      const nuevoMenu = [...menuActual, plato];
-      setContextState({ newValue: nuevoMenu, type: ActionTypes.setMenu });
-      console.log("Plato agregado al menú");
-      navigation.navigate("Home");
+      const noVeganos = menuActual.filter((item) => !item.vegan);
+      if (noVeganos.length >= 2) {
+        Alert.alert('Error', 'Ya hay 2 platos no veganos en el menú. No se puede agregar más.');
+      } else {
+        agregarPlato(menuActual);
+      }
     }
+  };
+
+  const agregarPlato = (menuActual) => {
+    const nuevoMenu = [...menuActual, plato];
+    setContextState({ newValue: nuevoMenu, type: ActionTypes.setMenu });
+    console.log("Plato agregado al menú");
+    setCantidadPlatos(cantidadPlatos + 1);
+    navigation.navigate("Home");
   };
 
   return (
