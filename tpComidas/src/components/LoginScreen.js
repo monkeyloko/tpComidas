@@ -15,7 +15,7 @@ const LoginScreen = ({ navigation }) => {
             password: password
         }
         if (!email || !password) {
-            Alert.alert('Campos vacíos', 'Por favor, complete todos los campos.');
+            console.log('Campos vacíos:', 'Por favor, complete todos los campos.');
             return;
         }
 
@@ -27,7 +27,6 @@ const LoginScreen = ({ navigation }) => {
             navigation.navigate('Home');
         } catch (error) {
             console.error('Error de inicio de sesión:', error);
-            Alert.alert('Error de inicio de sesión', 'Ha ocurrido un error al iniciar sesión.');
         } finally {
             setLoading(false);
         }
