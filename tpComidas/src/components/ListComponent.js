@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { SafeAreaView, FlatList, ActivityIndicator, Text, TextInput, View, StyleSheet, TouchableOpacity } from "react-native";
+import { SafeAreaView, FlatList, Text, TextInput, View, StyleSheet, TouchableOpacity, Animated } from "react-native";
 import { getComidasBySearch } from "../services/apiService.js";
 import { ActionTypes, useContextState } from "../../contextState";
 import ListChild from "./Listchild";
@@ -8,6 +8,8 @@ const ListComponent = ({ navigation }) => {
   const { contextState, setContextState } = useContextState();
   const [pressed, setPressed] = useState({});
   const [search, setSearch] = useState("pizza");
+  const [hovered, setHovered] = useState(false);
+  const scaleValue = new Animated.Value(1);
 
   const handleSearch = () => {
     if (search.length >= 2) {
@@ -34,8 +36,18 @@ const ListComponent = ({ navigation }) => {
     />
   );
 
+  const handleHover = () => {
+    setHovered(!hovered);
+
+    Animated.spring(scaleValue, {
+      toValue: hovered ? 1 : 1.05,
+      useNativeDriver: true,
+    }).start();
+  }
+
   return (
     <SafeAreaView style={styles.container}>
+      <Text style={styles.title}>Buscar Comida</Text>
       <TextInput
         style={styles.input}
         placeholder="Buscar comida"
@@ -43,13 +55,13 @@ const ListComponent = ({ navigation }) => {
         onChangeText={(text) => setSearch(text)}
       />
       <TouchableOpacity
-        style={styles.searchButton}
+        style={[styles.searchButton, { transform: [{ scale: scaleValue }] }]}
         onPress={handleSearch}
+        onMouseEnter={handleHover}
+        onMouseLeave={handleHover}
       >
         <Text style={styles.searchButtonText}>Buscar</Text>
       </TouchableOpacity>
-
-
 
       <FlatList
         data={contextState?.allComidas ?? []}
@@ -63,14 +75,21 @@ const ListComponent = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#F2F2F2',
     alignItems: 'center',
     justifyContent: 'center',
+    padding: 16,
+  },
+  title: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    color: '#333333',
   },
   input: {
     height: 40,
     width: '80%',
-    borderColor: 'gray',
+    borderColor: '#333333',
     borderWidth: 1,
     borderRadius: 5,
     marginBottom: 20,
@@ -79,14 +98,16 @@ const styles = StyleSheet.create({
   searchButton: {
     backgroundColor: '#007bff',
     borderRadius: 5,
-    width: '80%',
-    height: 40,
+    paddingVertical: 12,
+    paddingHorizontal: 24,
     alignItems: 'center',
     justifyContent: 'center',
+    cursor: 'pointer',
   },
   searchButtonText: {
     color: 'white',
     fontWeight: 'bold',
+    fontSize: 16,
   },
 });
 

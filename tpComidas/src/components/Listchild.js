@@ -40,7 +40,7 @@ const ListChild = ({ navigation, item, pressed, setPressed, index }) => {
       <View
         style={[
           ListChildStyle.item,
-          { backgroundColor: pressed === index ? "#00ffff" : "#ececec" },
+          { backgroundColor: "#ececec" },
         ]}
       >
         <Image

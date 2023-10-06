@@ -11,30 +11,6 @@ const DetallePlato = ({ navigation, route }) => {
   const [cantidadPlatos, setCantidadPlatos] = useState(0);
   const { contextState, setContextState } = useContextState();
 
-  const showAlert = () =>
-    Alert.alert(
-      'Error',
-      'El plato ya se encuentra en el menú',
-      [
-        {
-          text: 'Cancelar',
-          onPress: () => console.log('Cancel Pressed'),
-          style: 'cancel',
-        },
-        {
-          text: 'Eliminar',
-          onPress: () => Eliminar(),
-          style: 'destructive',
-        },
-      ],
-      {
-        cancelable: true,
-        onDismiss: () =>
-          Alert.alert(
-            'This alert was dismissed by tapping outside of the alert dialog.',
-          ),
-      },
-    );
 
   useEffect(() => {
     setContextState({ newValue: true, type: ActionTypes.setLoading });
@@ -80,18 +56,18 @@ const DetallePlato = ({ navigation, route }) => {
     const platoExistente = menuActual.find((item) => item.id === plato.id);
 
     if (menuActual.length >= 4) {
-      Alert.alert('Error', 'El menú ya tiene 4 platos. No se puede agregar más.');
+      console.log('El menú ya tiene 4 platos. No se puede agregar más.');
     } else if (plato.vegan) {
       const veganos = menuActual.filter((item) => item.vegan);
       if (veganos.length >= 2) {
-        Alert.alert('Error', 'Ya hay 2 platos veganos en el menú. No se puede agregar más.');
+        console.log('Ya hay 2 platos veganos en el menú. No se puede agregar más.');
       } else {
         agregarPlato(menuActual);
       }
     } else {
       const noVeganos = menuActual.filter((item) => !item.vegan);
       if (noVeganos.length >= 2) {
-        Alert.alert('Error', 'Ya hay 2 platos no veganos en el menú. No se puede agregar más.');
+        console.log('Ya hay 2 platos no veganos en el menú. No se puede agregar más.');
       } else {
         agregarPlato(menuActual);
       }
